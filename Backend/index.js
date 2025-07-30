@@ -149,10 +149,21 @@ mongoose.connect(process.env.MONGO_URL, {
   .catch((err) => console.error("❌ MongoDB error:", err));
 
 // Middleware
+
+const allowedOrigins = ["http://localhost:5173", "http://localhost:3000"];
+
 app.use(cors({
-  origin: "http://localhost:3000", // or 5173 if using Vite
-  credentials: true
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
 }));
+
+
 app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
 
@@ -175,6 +186,9 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/recommend", recommendRoutes);
 app.use("/api/order", orderRoutes);
+app.use("/api/cart", require("./routes/cart"));
+app.use("/api/payment", require("./routes/payment"));
+
 
 // Test route
 app.get("/", (req, res) => {

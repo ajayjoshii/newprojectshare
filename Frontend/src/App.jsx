@@ -2909,7 +2909,11 @@ import Contact from "./components/Contact";
 import Cart from "./components/Cart";
 import Footer from "./components/Footer";
 import Profile from "./components/Profile";
-
+import Delivery_Charges from "./components/Delivery_Charges";
+import HowToOrder from "./components/HowToOrder";
+import Faqs from "./components/Faqs";
+import PaymentGateway from "./components/PaymentGateway";
+const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 const PROVINCES = [
   "Koshi",
   "Madhesh",
@@ -3014,21 +3018,62 @@ export default function App() {
     );
   }, [user]);
 
-  const addToCart = (item) => {
+  // const addToCart = (item) => {
+  //   if (!user) {
+  //     alert("Please login to add to cart.");
+  //     navigate("/login");
+  //     return;
+  //   }
+  //   if (!province || province === "Unknown") {
+  //     alert("Please allow location or select a valid province.");
+  //     return;
+  //   }
+  //   const exists = cart.find((c) => c.id === item.id);
+  //   if (exists) {
+  //     setCart(cart.map((c) => (c.id === item.id ? { ...c, qty: c.qty + 1 } : c)));
+  //   } else {
+  //     setCart([...cart, { ...item, qty: 1 }]);
+  //   }
+  // };
+
+
+  const addToCart = async (item) => {
     if (!user) {
       alert("Please login to add to cart.");
       navigate("/login");
       return;
     }
+
     if (!province || province === "Unknown") {
       alert("Please allow location or select a valid province.");
       return;
     }
+
     const exists = cart.find((c) => c.id === item.id);
+    let updatedCart;
+
     if (exists) {
-      setCart(cart.map((c) => (c.id === item.id ? { ...c, qty: c.qty + 1 } : c)));
+      updatedCart = cart.map((c) =>
+        c.id === item.id ? { ...c, qty: c.qty + 1 } : c
+      );
     } else {
-      setCart([...cart, { ...item, qty: 1 }]);
+      updatedCart = [...cart, { ...item, qty: 1 }];
+    }
+
+    setCart(updatedCart);
+
+    // Send to backend
+    try {
+      await axios.post(`${BASE_URL}/api/cart/add`, {
+        userId: user._id, // or user.id depending on your user structure
+        itemId: item.id,
+        name: item.name,
+        price: item.price,
+        qty: exists ? exists.qty + 1 : 1,
+        province: province,
+      });
+    } catch (err) {
+      console.error("Error adding to cart:", err);
     }
   };
 
@@ -3127,6 +3172,12 @@ export default function App() {
             }
           />
           <Route path="/login" element={<Login onLogin={handleLogin} />} />
+          <Route path="/delivery-charges" element={<Delivery_Charges />} />
+          <Route path="/how-to-order" element={<HowToOrder />} />
+          <Route path="/faqs" element={<Faqs />} />
+          <Route path="/payment-gateway" element={<PaymentGateway />} />
+
+
           <Route path="/profile" element={<Profile user={user} onLogout={handleLogout} />} />
         </Routes>
       </main>

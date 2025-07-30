@@ -9,8 +9,8 @@ export default function Contact() {
           <p className="text-lg mb-3"><strong>Phone:</strong> 5970477,, 9803301192</p>
           <p className="text-lg">
             <strong>Social Media:</strong>
-            <a href="https://facebook.com/foodmandu" target="_blank" rel="noreferrer" className="ml-3 text-blue-600 hover:underline">Facebook</a>
-            <a href="https://instagram.com/foodmandu" target="_blank" rel="noreferrer" className="ml-3 text-pink-600 hover:underline">Instagram</a>
+            <a href="https://www.facebook.com/profile.php?id=61578910108826&mibextid=ZbWKwL" target="_blank" rel="noreferrer" className="ml-3 text-blue-600 hover:underline">Facebook</a>
+            <a href="https://www.instagram.com/foodordernp?igsh=ZGUzMzM3NWJiOQ%3D%3D" target="_blank" rel="noreferrer" className="ml-3 text-pink-600 hover:underline">Instagram</a>
             <a href="https://twitter.com/foodmandu" target="_blank" rel="noreferrer" className="ml-3 text-blue-400 hover:underline">Twitter</a>
             <a href="https://tiktok.com/@foodmandu" target="_blank" rel="noreferrer" className="ml-3 text-black hover:underline">Tiktok</a>
           </p>

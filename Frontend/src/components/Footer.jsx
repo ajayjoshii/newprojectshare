@@ -183,14 +183,10 @@ const Footer = () => {
             <li>
               <Link to="/about" className="hover:underline">About Us</Link>
             </li>
+            
             <li>
-              <Link to="/areas" className="hover:underline">Available Areas</Link>
-            </li>
-            <li>
-              <Link to="/delivery-charges" className="hover:underline">Delivery Charges</Link>
-            </li>
-            <li>
-              <Link to="/blog" className="hover:underline">Blog</Link>
+              <Link to="/delivery-charges" className="hover:underline">Delivery Charges
+              </Link>
             </li>
           </ul>
         </div>
@@ -229,7 +225,7 @@ const Footer = () => {
           <h3 className="text-lg font-semibold mb-3">Connect with Us</h3>
           <div className="flex space-x-4 mb-4">
             <a
-              href="https://www.facebook.com/ajay.shrestha.364674"
+              href="https://www.facebook.com/profile.php?id=61578910108826&mibextid=ZbWKwL"
               target="_blank"
               rel="noopener noreferrer"
               className="text-black hover:text-blue-500"
@@ -247,7 +243,7 @@ const Footer = () => {
               <FaTwitter />
             </a>
             <a
-              href="https://www.instagram.com"
+              href="https://www.instagram.com/foodordernp?igsh=ZGUzMzM3NWJiOQ=="
               target="_blank"
               rel="noopener noreferrer"
               className="text-black hover:text-pink-500"
