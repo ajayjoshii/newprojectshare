@@ -34,24 +34,46 @@
 
 
 
-const express = require("express");
-const auth = require("../middleware/auth");
-const upload = require("../middleware/upload");
-const {
-  register,
-  login,
-  getProfile,
-  uploadImage,
-  resetPassword,
-} = require("../controllers/userController");
+// const express = require("express");
+// const auth = require("../middleware/authMiddleware");
+// const upload = require("../middleware/upload");
+// const {
+//   register,
+//   login,
+//   getProfile,
+//   uploadImage,
+//   resetPassword,
+// } = require("../controllers/userController");
 
+// const router = express.Router();
+
+// router.post("/register", register);
+// router.post("/login", login);
+// router.get("/profile", auth, getProfile);
+// router.post("/upload-image", auth, upload.single("profileImage"), uploadImage);
+// router.post("/reset-password", auth, resetPassword);
+
+// module.exports = router;
+
+const express = require("express");
 const router = express.Router();
 
+const {
+  getProfile,
+  register,
+  login,
+  uploadImage,
+  resetPassword
+} = require("../controllers/userController");
+
+const { authMiddleware } = require("../middleware/authMiddleware");
+
+// Public routes
 router.post("/register", register);
 router.post("/login", login);
-router.get("/profile", auth, getProfile);
-router.post("/upload-image", auth, upload.single("profileImage"), uploadImage);
-router.post("/reset-password", auth, resetPassword);
+
+// Protected routes (require token)
+router.get("/profile", authMiddleware, getProfile);
+router.post("/reset-password", authMiddleware, resetPassword);
 
 module.exports = router;
-

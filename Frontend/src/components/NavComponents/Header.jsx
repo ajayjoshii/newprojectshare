@@ -959,7 +959,7 @@ export default function Header({ user, cart, province, setProvince, onLogout, on
   const [searchInput, setSearchInput] = useState("");
 
   const logout = () => {
-    fetch("http://localhost:5000/api/auth/logout", {
+    fetch("http://localhost:3001/api/auth/logout", {
       method: "POST",
       credentials: "include",
     }).then(() => {

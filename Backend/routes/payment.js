@@ -1,13 +1,28 @@
-// routes/payment.js
 const express = require("express");
 const router = express.Router();
+const Payment = require("../models/Payment");
 
-router.post("/checkout", async (req, res) => {
-  const { items, total } = req.body;
+// Save payment (called on eSewa success)
+router.post("/save", async (req, res) => {
+  try {
+    const newPayment = new Payment(req.body);
+    await newPayment.save();
+    res.json({ success: true, message: "Payment saved successfully", payment: newPayment });
+  } catch (err) {
+    console.error("Payment save error:", err);
+    res.status(500).json({ success: false, message: "Payment save failed" });
+  }
+});
 
-  // Logic: e.g., send to Khalti/eSewa or any payment gateway
-
-  res.json({ success: true, message: "Payment initiated", redirectUrl: "/payment-gateway" });
+// Get receipt
+router.get("/receipt/:id", async (req, res) => {
+  try {
+    const payment = await Payment.findById(req.params.id);
+    if (!payment) return res.status(404).json({ message: "Not found" });
+    res.json(payment);
+  } catch (err) {
+    res.status(500).json({ message: "Error retrieving payment" });
+  }
 });
 
 module.exports = router;

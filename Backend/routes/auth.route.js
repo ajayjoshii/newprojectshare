@@ -25,25 +25,66 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 
+// // Register
+// router.post('/register', async (req, res) => {
+//   try {
+//     const { name, email, password, address } = req.body;
+//     if (!name || !email || !password) return res.status(400).json({ msg: 'Missing fields' });
+
+//     const existingUser = await User.findOne({ email });
+//     if (existingUser) return res.status(400).json({ msg: 'Email already registered' });
+
+//     const hashedPassword = await bcrypt.hash(password, 10);
+
+//     const newUser = new User({ name, email, password: hashedPassword, address });
+//     await newUser.save();
+
+//     res.status(201).json({ msg: 'User registered successfully' });
+//   } catch (error) {
+//     res.status(500).json({ msg: error.message });
+//   }
+// });
+
 // Register
 router.post('/register', async (req, res) => {
   try {
-    const { name, email, password, address } = req.body;
-    if (!name || !email || !password) return res.status(400).json({ msg: 'Missing fields' });
+    const { name, email, password, address, phone } = req.body;
+    if (!name || !email || !password || !address || !phone)
+      return res.status(400).json({ msg: 'Missing fields' });
 
     const existingUser = await User.findOne({ email });
-    if (existingUser) return res.status(400).json({ msg: 'Email already registered' });
+    if (existingUser)
+      return res.status(400).json({ msg: 'Email already registered' });
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = new User({ name, email, password: hashedPassword, address });
+    const newUser = new User({
+      name,
+      email,
+      password: hashedPassword,
+      address,
+      phone,
+    });
     await newUser.save();
 
-    res.status(201).json({ msg: 'User registered successfully' });
+    const userToSend = {
+      id: newUser._id,
+      name: newUser.name,
+      email: newUser.email,
+      address: newUser.address,
+      phone: newUser.phone,
+      profileImage: newUser.profileImage || null,
+    };
+
+    // Optional: Generate token and set cookie or return it
+    const token = jwt.sign({ id: newUser._id }, JWT_SECRET, { expiresIn: "1d" });
+
+    res.status(201).json({ msg: "User registered successfully", user: userToSend, token });
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
 });
+
 
 // Login
 router.post('/login', async (req, res) => {
@@ -193,47 +234,6 @@ router.post('/reset-password/:token', async (req, res) => {
   }
 });
 
-// Google OAuth
-router.get("/auth/google", (req, res, next) => {
-  const flow = req.query.flow;
-  passport.authenticate("google", {
-    scope: ["profile", "email"],
-    state: flow
-  })(req, res, next);
-});
-
-router.get("/auth/google/callback", (req, res, next) => {
-  const flow = req.query.state;
-  passport.authenticate("google", {
-    failureRedirect: "http://localhost:3000/login-failure"
-  })(req, res, () => {
-    const redirectUrl = flow === "register"
-      ? "http://localhost:3000/register-success"
-      : "http://localhost:3000/login-success";
-    res.redirect(redirectUrl);
-  });
-});
-
-// Facebook OAuth
-router.get("/auth/facebook", (req, res, next) => {
-  const flow = req.query.flow;
-  passport.authenticate("facebook", {
-    scope: ["email"],
-    state: flow
-  })(req, res, next);
-});
-
-router.get("/auth/facebook/callback", (req, res, next) => {
-  const flow = req.query.state;
-  passport.authenticate("facebook", {
-    failureRedirect: "http://localhost:3000/login-failure"
-  })(req, res, () => {
-    const redirectUrl = flow === "register"
-      ? "http://localhost:3000/register-success"
-      : "http://localhost:3000/login-success";
-    res.redirect(redirectUrl);
-  });
-});
 
 module.exports = router;
 
