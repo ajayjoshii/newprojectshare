@@ -25,27 +25,6 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 
-// // Register
-// router.post('/register', async (req, res) => {
-//   try {
-//     const { name, email, password, address } = req.body;
-//     if (!name || !email || !password) return res.status(400).json({ msg: 'Missing fields' });
-
-//     const existingUser = await User.findOne({ email });
-//     if (existingUser) return res.status(400).json({ msg: 'Email already registered' });
-
-//     const hashedPassword = await bcrypt.hash(password, 10);
-
-//     const newUser = new User({ name, email, password: hashedPassword, address });
-//     await newUser.save();
-
-//     res.status(201).json({ msg: 'User registered successfully' });
-//   } catch (error) {
-//     res.status(500).json({ msg: error.message });
-//   }
-// });
-
-// Register
 router.post('/register', async (req, res) => {
   try {
     const { name, email, password, address, phone } = req.body;

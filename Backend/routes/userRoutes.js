@@ -1,63 +1,9 @@
-// const express = require("express");
-// const auth = require("../middleware/auth");
-// const User = require("../models/User");
-// const {
-//   register,
-//   login,
-//   getProfile,
-//   uploadImage,
-//   resetPassword,
-//   forgotPassword,
-// } = require("../controllers/userController");
-// const auth = require("../middleware/auth");
-// const upload = require("../middleware/upload");
-
-// const router = express.Router();
-
-// router.post("/register", register);
-
-// router.post("/order", async (req, res) => {
-//   const { userId, items, province } = req.body;
-//   const user = await User.findById(userId);
-//   user.orders.push({ items, province, orderDate: new Date() });
-//   await user.save();
-//   res.status(200).json({ message: "Order saved" });
-// });
-// router.post("/login", login);
-// router.get("/profile", auth, getProfile);
-// router.post("/upload-image", auth, upload.single("profileImage"), uploadImage);
-// router.post("/reset-password", auth, resetPassword);
-// router.post("/forgot-password", forgotPassword);
-
-// module.exports = router;
-
-
-
-
-// const express = require("express");
-// const auth = require("../middleware/authMiddleware");
-// const upload = require("../middleware/upload");
-// const {
-//   register,
-//   login,
-//   getProfile,
-//   uploadImage,
-//   resetPassword,
-// } = require("../controllers/userController");
-
-// const router = express.Router();
-
-// router.post("/register", register);
-// router.post("/login", login);
-// router.get("/profile", auth, getProfile);
-// router.post("/upload-image", auth, upload.single("profileImage"), uploadImage);
-// router.post("/reset-password", auth, resetPassword);
-
-// module.exports = router;
 
 const express = require("express");
 const router = express.Router();
-
+const path = require("path");
+const fs = require("fs");
+const multer = require("multer");
 const {
   getProfile,
   register,
@@ -67,13 +13,31 @@ const {
 } = require("../controllers/userController");
 
 const { authMiddleware } = require("../middleware/authMiddleware");
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const dir = './uploads/profileImages';
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    cb(null, dir);
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    cb(null, req.user.id + ext);
+  }
+});
 
-// Public routes
+const upload = multer({ storage });
+
 router.post("/register", register);
 router.post("/login", login);
-
-// Protected routes (require token)
 router.get("/profile", authMiddleware, getProfile);
 router.post("/reset-password", authMiddleware, resetPassword);
+router.post("/upload-image", authMiddleware, upload.single("profileImage"), uploadImage);
 
 module.exports = router;
+
+
+
+
+
+
+

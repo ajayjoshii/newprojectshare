@@ -13,11 +13,7 @@ const userSchema = new mongoose.Schema({
   ],
 
   password: { type: String, required: true },
-  googleId: { type: String },
-  facebookId: { type: String },
   address: { type: String },
-  oauthId: { type: String, default: null },
-  oauthProvider: { type: String, default: null }, // e.g. "google", "facebook"
 
   profileImage: { type: String, default: "" }, // base64 string or URL
 }, { timestamps: true });
