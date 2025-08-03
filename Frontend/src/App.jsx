@@ -15,6 +15,8 @@ import Footer from "./components/Footer/Footer";
 import HowToOrder from "./components/Footer/HowToOrder";
 import SuccessPage from "./components/Success_Failure_page/SuccessPage";
 import FailurePage from "./components/Success_Failure_page/FailurePage";
+import ForgotPasswordRequest from "./components/Password_Reset/ForgotPasswordRequest";
+import ResetPassword from "./components/Password_Reset/ResetPassword";
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 const PROVINCES = [
   "Koshi",
@@ -247,6 +249,11 @@ export default function App() {
           <Route path="/payment-success" element={<SuccessPage onLogin={setUser}/>
              } />
           <Route path="/payment-failure" element={<FailurePage />} />
+
+          <Route path="/forgot-password" element={<ForgotPasswordRequest />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
+
+
           
           <Route path="/profile" element={<Profile user={user} onLogout={handleLogout} />} />
         </Routes>

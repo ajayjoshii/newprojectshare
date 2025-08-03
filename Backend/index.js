@@ -13,7 +13,7 @@ const authRoutes = require("./routes/auth.route");
 const userRoutes = require("./routes/userRoutes");
 const recommendRoutes = require("./routes/recommend");
 const orderRoutes = require("./routes/orders");
-const cartRoutes = require("./routes/cart");
+const cartRoutes = require("./routes/orderRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 
 const connectToMongo = require("./config/db");
