@@ -17,6 +17,9 @@ import SuccessPage from "./components/Success_Failure_page/SuccessPage";
 import FailurePage from "./components/Success_Failure_page/FailurePage";
 import ForgotPasswordRequest from "./components/Password_Reset/ForgotPasswordRequest";
 import ResetPassword from "./components/Password_Reset/ResetPassword";
+import ImageCarousel from "./components/ImageCarousel/ImageCarousel";
+import { FaBars, FaTimes } from "react-icons/fa";
+
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 const PROVINCES = [
   "Koshi",
@@ -59,6 +62,7 @@ export default function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
   const [recommendations, setRecommendations] = useState([]);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const getRecommendations = async () => {
     try {
@@ -199,7 +203,7 @@ export default function App() {
   );
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-white">
       <Header
         user={user}
         cart={cart}
@@ -207,20 +211,27 @@ export default function App() {
         setProvince={setProvince}
         onLogout={handleLogout}
         onSearch={setSearchTerm}
+        mobileMenuOpen={mobileMenuOpen}
+        setMobileMenuOpen={setMobileMenuOpen}
       />
       <main className="flex-grow container mx-auto p-6">
         <Routes>
           <Route
             path="/"
             element={
-              <Home
-                addToCart={addToCart}
-                province={province}
-                setProvince={setProvince}
-                provinces={PROVINCES}
-                recs={recs}
-                defaultFoodItems={filteredFoodItems}
-              />
+              <>
+                <ImageCarousel />
+                <Home
+                  addToCart={addToCart}
+                  province={province}
+                  setProvince={setProvince}
+                  provinces={PROVINCES}
+                  recs={recs}
+                  defaultFoodItems={filteredFoodItems}
+                />
+                <About/>
+
+              </>
             }
           />
           <Route path="/about" element={<About />} />
@@ -240,21 +251,14 @@ export default function App() {
             }
           />
           <Route path="/login" element={<Login onLogin={handleLogin} onRegister={setUser} />} />
-
-
           <Route path="/delivery-charges" element={<Delivery_Charges />} />
           <Route path="/how-to-order" element={<HowToOrder />} />
           <Route path="/faqs" element={<Faqs />} />
           <Route path="/payment-gateway" element={<PaymentGateway />} />
-          <Route path="/payment-success" element={<SuccessPage onLogin={setUser}/>
-             } />
+          <Route path="/payment-success" element={<SuccessPage onLogin={setUser} />} />
           <Route path="/payment-failure" element={<FailurePage />} />
-
           <Route path="/forgot-password" element={<ForgotPasswordRequest />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
-
-
-          
           <Route path="/profile" element={<Profile user={user} onLogout={handleLogout} />} />
         </Routes>
       </main>

@@ -17,7 +17,7 @@ const cartRoutes = require("./routes/orderRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 
 const connectToMongo = require("./config/db");
-const { getEsewaPaymentHash, verifyEsewaPayment } = require("./models/esewa");
+const { getEsewaPaymentHash, verifyEsewaPayment } = require("./controllers/esewa");
 
 const Payment = require("./models/paymentModel");
 const Item = require("./models/itemModel");

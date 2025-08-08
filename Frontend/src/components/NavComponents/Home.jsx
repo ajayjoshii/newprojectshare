@@ -1,6 +1,3 @@
-
-import React from "react";
-
 export default function Home({ addToCart, province, setProvince, provinces, recs, searchTerm, defaultFoodItems }) {
   const filteredItems = searchTerm
     ? defaultFoodItems.filter((item) =>
