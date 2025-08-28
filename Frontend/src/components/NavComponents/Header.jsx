@@ -56,7 +56,7 @@ export default function Header({ user, cart, province, setProvince, onLogout, on
   };
 
   return (
-    <header className="fixed top-0 w-full bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500 text-white shadow-lg z-50">
+    <header className="fixed top-0 w-full bg-gradient-to-r from-red-600 via-blue-500 to-yellow-500 text-white shadow-lg z-50">
       <div className="flex items-center justify-between px-4 py-3">
         <div className="flex items-center space-x-4">
           <button
@@ -192,13 +192,13 @@ export default function Header({ user, cart, province, setProvince, onLogout, on
       </div>
 
       <nav
-        className={`md:hidden fixed top-14 left-0 w-full bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500 text-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out ${menuOpen ? "translate-x-0" : "-translate-x-full"
+        className={`md:hidden fixed top-14 left-0 w-full bg-gradient-to-r bg-blue-500 text-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out ${menuOpen ? "translate-x-0" : "-translate-x-full"
           }`}
       >
         <div className="flex flex-col space-y-4 px-6 py-6">
           <Link
             to="/"
-          className="text-xl font-bold px-3 py-3 rounded bg-blue-500 text-gray-900 w-[110px]"
+          className="text-xl font-bold px-3 py-1 rounded bg-yellow-500 text-gray-900 w-[90px]"
 
             onClick={() => setMenuOpen(false)}
           >
@@ -207,7 +207,7 @@ export default function Header({ user, cart, province, setProvince, onLogout, on
 
           <Link
             to="/cart"
-            className="text-xl font-bold px-3 py-3 rounded hover:text-blue-500 transition-colors duration-[1200ms] ease-in-out w-[150px]"
+            className="text-xl font-bold px-3 py-3 rounded hover:text-yellow-500 transition-colors duration-[1200ms] ease-in-out w-[150px]"
 
             onClick={() => setMenuOpen(false)}
           >
@@ -216,7 +216,7 @@ export default function Header({ user, cart, province, setProvince, onLogout, on
 
           <Link
             to="/about"
-            className="text-xl font-bold px-3 py-3 rounded hover:text-blue-500 transition-colors duration-[1200ms] ease-in-out"
+            className="text-xl font-bold px-3 py-3 rounded hover:text-yellow-500 transition-colors duration-[1200ms] ease-in-out"
 
             onClick={() => setMenuOpen(false)}
           >
@@ -225,7 +225,7 @@ export default function Header({ user, cart, province, setProvince, onLogout, on
 
           <Link
             to="/contact"
-            className="text-xl font-bold px-3 py-3 rounded hover:text-blue-500 transition-colors duration-[1200ms] ease-in-out w-[150px]"
+            className="text-xl font-bold px-3 py-3 rounded hover:text-yellow-500 transition-colors duration-[1200ms] ease-in-out w-[150px]"
 
             onClick={() => setMenuOpen(false)}
           >
@@ -257,7 +257,7 @@ export default function Header({ user, cart, province, setProvince, onLogout, on
           ) : (
             <Link
               to="/login"
-              className="bg-white text-black text-xl px-3 py-3 rounded font-semibold hover:bg-blue-600 transition-colors duration-[1200ms] w-[100px] ease-in-out my-2" 
+              className=" text-white text-2xl px-3 py-3 rounded font-bold hover:text-red-600 transition-colors duration-[1200ms] w-[100px] ease-in-out my-2" 
               onClick={() => setMenuOpen(false)}
             >
               Login

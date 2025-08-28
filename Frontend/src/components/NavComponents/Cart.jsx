@@ -1,3 +1,4 @@
+import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -7,37 +8,45 @@ const PRODUCT_CODE = import.meta.env.VITE_ESEWA_PRODUCT_CODE || "your_product_co
 
 export default function Cart({ updateQty, deleteItem, clearCart, user, province, cartItems }) {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
   const total = cartItems.reduce((acc, item) => acc + item.price * item.qty, 0);
 
-  const savePaymentToBackend = async (transaction_uuid) => {
+  // Save order and items to backend after successful payment
+  const saveOrderAndItems = async (transaction_uuid) => {
     try {
-      const body = {
-        user: { _id: user?._id },
-        items: cartItems.map(item => ({
-          itemId: item._id || item.id,
-          name: item.name,
-          qty: item.qty,
-          price: item.price,
-        })),
-        totalAmount: total,
-        province,
-        transaction_uuid,
-      };
+      if (!user?._id) throw new Error("User not logged in");
 
-      const res = await axios.post(`${BASE_URL}/api/payments/save`, body, {
-        headers: {
-          "Content-Type": "application/json",
-          "x-auth-token": localStorage.getItem("token") || "",
-        },
+      // Prepare items to save in "items" collection
+      const savedItems = await Promise.all(cartItems.map(async (item) => {
+        const res = await axios.post(`${BASE_URL}/api/admin/items`, {
+          name: item.name,
+          price: item.price,
+          category: item.category || "General",
+          inStock: true,
+        }, {
+          headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` }
+        });
+        return res.data;
+      }));
+
+      // Save order in "orders" collection
+      const orderRes = await axios.post(`${BASE_URL}/api/order/submit`, {
+        userId: user._id,
+        items: cartItems.map(i => ({ id: i._id || i.id, name: i.name, price: i.price, qty: i.qty, img: i.img })),
+        totalPrice: total,
+        province,
+        name: user.name,
+        email: user.email,
+        transaction_uuid,
+      }, {
+        headers: { "x-auth-token": localStorage.getItem("token") || "" }
       });
 
-      if (res.data.success) {
-        navigate(`/payment-success?transaction_uuid=${transaction_uuid}`);
-      } else {
-        alert("Failed to save payment info. Please contact support.");
-      }
-    } catch {
-      alert("Error saving payment info.");
+      return orderRes.data.order;
+    } catch (err) {
+      console.error("Error saving order/items:", err);
+      throw err;
     }
   };
 
@@ -46,7 +55,10 @@ export default function Cart({ updateQty, deleteItem, clearCart, user, province,
     if (!user?._id) return alert("Please login before checkout.");
 
     try {
-      const res = await axios.post(`${BASE_URL}/initialize-esewa`, {
+      setLoading(true);
+
+      // Initialize eSewa payment
+      const initRes = await axios.post(`${BASE_URL}/initialize-esewa`, {
         items: cartItems.map(item => ({
           itemId: item._id || item.id,
           name: item.name,
@@ -57,63 +69,75 @@ export default function Cart({ updateQty, deleteItem, clearCart, user, province,
         userId: user._id,
       });
 
-      if (res.data.success) {
-        const { signature, signed_field_names } = res.data.payment;
-        const transaction_uuid = res.data.purchasedItemData._id;
-
-        localStorage.setItem("cartItems", JSON.stringify(cartItems));
-        localStorage.setItem("province", province);
-
-        const form = document.createElement("form");
-        form.method = "POST";
-        form.action = `${ESEWA_GATEWAY}/api/epay/main/v2/form`;
-
-        const fields = {
-          amount: total,
-          tax_amount: 0,
-          failure_url: `${window.location.origin}/payment-failure`,
-          product_delivery_charge: 0,
-          product_service_charge: 0,
-          product_code: PRODUCT_CODE,
-          signature,
-          signed_field_names,
-          success_url: `${window.location.origin}/payment-success?transaction_uuid=${transaction_uuid}`,
-          total_amount: total,
-          transaction_uuid,
-        };
-
-        Object.entries(fields).forEach(([key, value]) => {
-          const input = document.createElement("input");
-          input.type = "hidden";
-          input.name = key;
-          input.value = value;
-          form.appendChild(input);
-        });
-
-        document.body.appendChild(form);
-        form.submit();
-      } else {
+      if (!initRes.data.success) {
         alert("Payment initialization failed.");
+        setLoading(false);
+        return;
       }
-    } catch {
-      alert("Failed to initialize eSewa payment.");
+
+      const { signature, signed_field_names } = initRes.data.payment;
+      const transaction_uuid = initRes.data.purchasedItemData._id;
+
+      // Save items and order in backend before redirecting
+      await saveOrderAndItems(transaction_uuid);
+
+      // Store cart temporarily
+      localStorage.setItem("cartItems", JSON.stringify(cartItems));
+      localStorage.setItem("province", province);
+
+      // Create form and redirect to eSewa
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = `${ESEWA_GATEWAY}/api/epay/main/v2/form`;
+
+      const fields = {
+        amount: total,
+        tax_amount: 0,
+        failure_url: `${window.location.origin}/payment-failure`,
+        product_delivery_charge: 0,
+        product_service_charge: 0,
+        product_code: PRODUCT_CODE,
+        signature,
+        signed_field_names,
+        success_url: `${window.location.origin}/payment-success?transaction_uuid=${transaction_uuid}`,
+        total_amount: total,
+        transaction_uuid,
+      };
+
+      Object.entries(fields).forEach(([key, value]) => {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        input.value = value;
+        form.appendChild(input);
+      });
+
+      document.body.appendChild(form);
+      form.submit();
+    } catch (err) {
+      console.error("eSewa payment error:", err);
+      alert("Failed to process eSewa payment.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="max-w-4xl mx-auto mt-[90px]">
       <h2 className="text-2xl font-semibold mb-6">Your Cart</h2>
+
       {cartItems.length === 0 ? (
         <p>Your cart is empty.</p>
       ) : (
         <>
           <button
             onClick={clearCart}
-            className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+            className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 mb-4"
           >
             Clear Cart
           </button>
-          <table className="w-full mt-4 border-collapse border border-gray-300 text-center">
+
+          <table className="w-full border-collapse border border-gray-300 text-center">
             <thead>
               <tr>
                 <th className="border border-gray-300 p-2">Item</th>
@@ -159,12 +183,15 @@ export default function Cart({ updateQty, deleteItem, clearCart, user, province,
               ))}
             </tbody>
           </table>
+
           <div className="text-right mt-4 text-lg font-bold">Total: Rs. {total}</div>
+
           <button
-            className="mt-6 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded"
+            className={`mt-6 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
             onClick={handleEsewaPayment}
+            disabled={loading}
           >
-            Checkout with eSewa
+            {loading ? "Processing..." : "Checkout with eSewa"}
           </button>
         </>
       )}

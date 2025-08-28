@@ -62,19 +62,6 @@ exports.register = async (req, res) => {
 };
 
 
-// exports.uploadImage = async (req, res) => {
-//   if (!req.file) {
-//     return res.status(400).json({ message: "No file uploaded" });
-//   }
-//   const imagePath = `/uploads/${req.file.filename}`;
-//   const user = await User.findByIdAndUpdate(
-//     req.user.id,
-//     { profileImage: imagePath },
-//     { new: true }
-//   );
-//   res.json({ profileImage: user.profileImage });
-// };
-
 // ---------------- RESET PASSWORD ----------------
 exports.resetPassword = async (req, res) => {
   const { currentPassword, newPassword } = req.body;

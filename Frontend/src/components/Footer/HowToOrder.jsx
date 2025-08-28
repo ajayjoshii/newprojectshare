@@ -12,7 +12,7 @@ export default function HowToOrder() {
       <ol className="list-decimal list-inside space-y-4 text-gray-800 text-base">
         <li>
           <span className="font-semibold text-green-700">Find our website:</span> 
-          <a href="https://foodmandu.com/Home/HowToOrder" className="text-blue-600 hover:text-blue-800 font-bold mx-2">FoodOrderNP</a>.
+          <a href="http://localhost:3000/" className="text-blue-600 hover:text-blue-800 font-bold mx-2">FoodOrderNP</a>.
         </li>
         <li>
           <span className="font-semibold text-green-700">Select your food:</span> Browse the menu from the website and pick your favorite dishes. The prices are shown along with food items.

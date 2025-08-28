@@ -18,26 +18,29 @@
 //   createdAt: { type: Date, default: Date.now },
 // });
 // module.exports = mongoose.model('Order', OrderSchema);
+
+// models/Order.js
+
 const mongoose = require("mongoose");
 
+const orderItemSchema = new mongoose.Schema({
+  id: String,
+  name: String,
+  price: Number,
+  qty: Number,
+  img: String
+}, { _id: false });
+
 const orderSchema = new mongoose.Schema({
-  userId: String,
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   name: String,
   email: String,
-  items: [
-    {
-      id: String,
-      name: String,
-      price: Number,
-      qty: Number,
-      img: String
-    }
-  ],
+  items: [orderItemSchema],
   province: String,
-  createdAt: {
-    type: Date,
-    default: Date.now
-  }
-});
+  totalPrice: { type: Number, default: 0 },
+  status: { type: String, enum: ["pending", "processing", "shipped", "completed", "cancelled"], default: "pending" },
+  paymentStatus: { type: String, enum: ["pending", "paid", "failed", "refunded"], default: "pending" },
+  createdAt: { type: Date, default: Date.now }
+}, { timestamps: true });
 
 module.exports = mongoose.model("Order", orderSchema);

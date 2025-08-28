@@ -1,3 +1,4 @@
+const adminRoutes = require("./routes/adminRoutes");
 
 const express = require("express");
 const mongoose = require("mongoose");
@@ -12,7 +13,7 @@ const bodyParser = require("body-parser");
 const authRoutes = require("./routes/auth.route");
 const userRoutes = require("./routes/userRoutes");
 const recommendRoutes = require("./routes/recommend");
-const orderRoutes = require("./routes/orders");
+const orderRoutes = require("./routes/orderRoutes");
 const cartRoutes = require("./routes/orderRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 
@@ -57,6 +58,8 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use("/api/admin", adminRoutes);
+
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 

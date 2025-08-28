@@ -18,8 +18,14 @@ import FailurePage from "./components/Success_Failure_page/FailurePage";
 import ForgotPasswordRequest from "./components/Password_Reset/ForgotPasswordRequest";
 import ResetPassword from "./components/Password_Reset/ResetPassword";
 import ImageCarousel from "./components/ImageCarousel/ImageCarousel";
-import { FaBars, FaTimes } from "react-icons/fa";
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminLogin from "./pages/AdminLogin";
 
+const ProtectedAdmin = ({ children }) => {
+  const token = localStorage.getItem("adminToken");
+  if (!token) return <Navigate to="/admin-login" />;
+  return children;
+};
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 const PROVINCES = [
   "Koshi",
@@ -149,7 +155,7 @@ export default function App() {
         qty: exists ? exists.qty + 1 : 1,
         province: province,
       });
-    } catch {}
+    } catch { }
   };
 
   const updateQty = (id, delta) => {
@@ -215,7 +221,15 @@ export default function App() {
         setMobileMenuOpen={setMobileMenuOpen}
       />
       <main className="flex-grow container mx-auto p-6">
+
         <Routes>
+          <Route path="/admin-login" element={<AdminLogin />} />
+          <Route path="/admin" element={
+            <ProtectedAdmin>
+              <AdminDashboard />
+            </ProtectedAdmin>
+          } />
+
           <Route
             path="/"
             element={
@@ -229,7 +243,7 @@ export default function App() {
                   recs={recs}
                   defaultFoodItems={filteredFoodItems}
                 />
-                <About/>
+                <About />
 
               </>
             }

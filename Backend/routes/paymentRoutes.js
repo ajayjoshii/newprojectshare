@@ -1,10 +1,14 @@
-
 const express = require("express");
 const router = express.Router();
-const { saveEsewaPayment, getPaymentByOrderId } = require("../controllers/paymentController");
+const { saveEsewaPayment, getPaymentByOrderId, getAllPayments } = require("../controllers/paymentController");
 
+// save payment after success
 router.post("/save", saveEsewaPayment);
+
+// fetch receipt
 router.get("/receipt/:orderId", getPaymentByOrderId);
 
-module.exports = router;
+// admin: fetch all payments
+router.get("/", getAllPayments);
 
+module.exports = router;
