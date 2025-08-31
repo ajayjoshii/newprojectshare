@@ -4,7 +4,6 @@ export default function Contact() {
       <h2 className="text-3xl font-bold mb-4 text-red-600">Contact Us</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 gap-x-20 mb-12">
-        {/* Contact Info */}
         <section className="p-6 bg-white rounded-md shadow-md w-full max-w-[760px] mx-auto">
           <h3 className="text-3xl font-semibold mb-4">Contact Information</h3>
           <p className="text-lg mb-3">
@@ -56,7 +55,6 @@ export default function Contact() {
           </p>
         </section>
 
-        {/* Complaint Handling */}
         <section className="p-6 bg-white rounded-md shadow-md w-full max-w-[760px] mx-auto">
           <h3 className="text-3xl font-semibold mb-4">Complaint Handling</h3>
           <p className="text-lg mb-3">

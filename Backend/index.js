@@ -1,5 +1,4 @@
 const adminRoutes = require("./routes/adminRoutes");
-
 const express = require("express");
 const mongoose = require("mongoose");
 const passport = require("passport");
@@ -131,9 +130,6 @@ app.get("/complete-payment", async (req, res) => {
     res.status(500).json({ success: false, message: "An error occurred", error });
   }
 });
-
-
-
 app.listen(3001, () => {
   console.log("✅ Backend listening at http://localhost:3001");
 });

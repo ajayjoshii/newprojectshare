@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const Payment = require("../models/Payment");
 
-// Save payment (called on eSewa success)
 router.post("/save", async (req, res) => {
   try {
     const newPayment = new Payment(req.body);
@@ -14,7 +13,6 @@ router.post("/save", async (req, res) => {
   }
 });
 
-// Get receipt
 router.get("/receipt/:id", async (req, res) => {
   try {
     const payment = await Payment.findById(req.params.id);

@@ -12,12 +12,10 @@ export default function Cart({ updateQty, deleteItem, clearCart, user, province,
 
   const total = cartItems.reduce((acc, item) => acc + item.price * item.qty, 0);
 
-  // Save order and items to backend after successful payment
   const saveOrderAndItems = async (transaction_uuid) => {
     try {
       if (!user?._id) throw new Error("User not logged in");
 
-      // Prepare items to save in "items" collection
       const savedItems = await Promise.all(cartItems.map(async (item) => {
         const res = await axios.post(`${BASE_URL}/api/admin/items`, {
           name: item.name,
@@ -30,7 +28,6 @@ export default function Cart({ updateQty, deleteItem, clearCart, user, province,
         return res.data;
       }));
 
-      // Save order in "orders" collection
       const orderRes = await axios.post(`${BASE_URL}/api/order/submit`, {
         userId: user._id,
         items: cartItems.map(i => ({ id: i._id || i.id, name: i.name, price: i.price, qty: i.qty, img: i.img })),
