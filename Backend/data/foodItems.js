@@ -1,4 +1,4 @@
-export const defaultFoodItems = [
+const defaultFoodItems = [
   { id: 1, name: "Dal Bhat", img: "https://grrrltraveler.com/wp-content/uploads/2018/08/NEPALI-DAL-BHAT.jpg", price: 250 },
   { id: 2, name: "Momo", img: "https://e7.pngegg.com/pngimages/979/343/png-clipart-mandu-momo-buuz-khinkali-pelmeni-meat-food-recipe-thumbnail.png", price: 200 },
   { id: 3, name: "Sel Roti", img: "https://i.ytimg.com/vi/tRy6TAKNNes/sddefault.jpg", price: 25 },
@@ -20,3 +20,5 @@ export const defaultFoodItems = [
   { id: 19, name: "Masu", img: "https://junifoods.com/wp-content/uploads/2023/12/Easy-Goat-Curry-Sajilo-Khasi-Ko-Masu-%E0%A4%B8%E0%A4%9C%E0%A4%BF%E0%A4%B2%E0%A5%8B-%E0%A4%96%E0%A4%B8%E0%A5%80%E0%A4%95%E0%A5%8B-%E0%A4%AE%E0%A4%BE%E0%A4%B8%E0%A5%81-1.jpg", price: 1400 },
   { id: 20, name: "Bhutuwa", img: "https://cdn.tasteatlas.com//images/dishes/cc879765847047629baf56168ed7501c.jpg?width=320&height=205", price: 400 },
 ];
+
+module.exports = defaultFoodItems;

@@ -111,8 +111,6 @@ const { authMiddleware } = require("../middleware/authMiddleware");
 const PurchasedItem = require("../models/purchasedItemModel"); // add at top
 const { getUserOrders } = require("../controllers/orderController");
 const {getRecommendations} = require("../controllers/orderController");
-
-
 // Add item to cart
 router.post("/add", async (req, res) => {
   const { userId, itemId, name, price, quantity } = req.body;
@@ -223,9 +221,24 @@ router.post("/save", authMiddleware, async (req, res) => {
   }
 });
 
-router.get("/recommendations", getRecommendations);
+// router.get("/recommendations", getRecommendations);
+// Fetch recommendations for logged-in user
+router.get("/recommendations", authMiddleware, getRecommendations);
+
 
 
 router.get("/user/:userId", authMiddleware, getUserOrders);
+
+
+// Get all orders from a specific province
+router.get("/province/:province", authMiddleware, async (req, res) => {
+  try {
+    const orders = await Order.find({ province: req.params.province });
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch province orders", error });
+  }
+});
+
 
 module.exports = router;

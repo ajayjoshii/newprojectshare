@@ -632,6 +632,7 @@ const ProtectedAdmin = ({ children }) => {
 
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 const PROVINCES = ["Koshi", "Madhesh", "Bagmati", "Gandaki", "Lumbini", "Karnali", "Sudurpashchim"];
+
 const defaultFoodItems = [
   { id: 1, name: "Dal Bhat", img: "https://grrrltraveler.com/wp-content/uploads/2018/08/NEPALI-DAL-BHAT.jpg", price: 250 },
   { id: 2, name: "Momo", img: "https://e7.pngegg.com/pngimages/979/343/png-clipart-mandu-momo-buuz-khinkali-pelmeni-meat-food-recipe-thumbnail.png", price: 200 },
@@ -663,6 +664,7 @@ export default function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -703,33 +705,30 @@ export default function App() {
     province: province || "Unknown"
   }));
 
+  // Inside App.jsx
   useEffect(() => {
-    if (!province) return;
-    const fetchUserOrders = async () => {
-      if (!user) {
-        setRecommendations([]);
-        return;
-      }
-      try {
-        const token = localStorage.getItem("token"); // get logged-in user's token
+  const fetchRecommendations = async () => {
+    if (!user || !province) {
+      setRecommendations([]);
+      return;
+    }
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.get(`${BASE_URL}/api/order/recommendations`, {
+        headers: { Authorization: `Bearer ${token}` },
+        params: { userId: user._id, province }
+      });
+      setRecommendations(res.data.recommendations || []);
+    } catch (err) {
+      console.error("Failed to fetch recommendations:", err);
+      setRecommendations([]);
+    }
+  };
+  fetchRecommendations();
+}, [user, province]);
 
-        const res = await axios.get(`${BASE_URL}/api/order/user/${user._id}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
 
-        const pastItems = res.data.flatMap(order => order.items);
 
-        const pastItemIds = pastItems.map(i => i.id);
-        const userSpecificRecs = foodItemsWithProvince.filter(item =>
-          pastItemIds.includes(item.id)
-        );
-        setRecommendations(userSpecificRecs.slice(0, 8));
-      } catch {
-        setRecommendations([]);
-      }
-    };
-    fetchUserOrders();
-  }, [province, user]);
 
   const addToCart = async (item) => {
     if (!user) {
