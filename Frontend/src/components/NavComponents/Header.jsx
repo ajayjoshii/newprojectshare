@@ -198,7 +198,7 @@ export default function Header({ user, cart, province, setProvince, onLogout, on
         <div className="flex flex-col space-y-4 px-6 py-6">
           <Link
             to="/"
-          className="text-xl font-bold px-3 py-1 rounded bg-yellow-500 text-gray-900 w-[90px]"
+            className="text-xl font-bold px-3 py-1 rounded bg-yellow-500 text-gray-900 w-[90px]"
 
             onClick={() => setMenuOpen(false)}
           >
@@ -249,7 +249,7 @@ export default function Header({ user, cart, province, setProvince, onLogout, on
                   logout();
                   setMenuOpen(false);
                 }}
-                className="bg-white text-black text-xl px-3 py-3 my-2 rounded font-semibold hover:bg-blue-600 transition-colors duration-[1200ms] w-[100px] ease-in-out" 
+                className="bg-white text-black text-xl px-3 py-3 my-2 rounded font-semibold hover:bg-blue-600 transition-colors duration-[1200ms] w-[100px] ease-in-out"
               >
                 Logout
               </button>
@@ -257,7 +257,7 @@ export default function Header({ user, cart, province, setProvince, onLogout, on
           ) : (
             <Link
               to="/login"
-              className=" text-white text-2xl px-3 py-3 rounded font-bold hover:text-red-600 transition-colors duration-[1200ms] w-[100px] ease-in-out my-2" 
+              className=" text-white text-2xl px-3 py-3 rounded font-bold hover:text-red-600 transition-colors duration-[1200ms] w-[100px] ease-in-out my-2"
               onClick={() => setMenuOpen(false)}
             >
               Login
@@ -267,6 +267,9 @@ export default function Header({ user, cart, province, setProvince, onLogout, on
         </div>
       </nav>
     </header>
+
+
+
   );
 }
 
