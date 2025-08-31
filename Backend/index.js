@@ -12,7 +12,6 @@ const bodyParser = require("body-parser");
 
 const authRoutes = require("./routes/auth.route");
 const userRoutes = require("./routes/userRoutes");
-const recommendRoutes = require("./routes/recommend");
 const orderRoutes = require("./routes/orderRoutes");
 const cartRoutes = require("./routes/orderRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
@@ -44,7 +43,6 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
-
 app.use(session({
   secret: process.env.SESSION_SECRET || "supersecret",
   resave: false,
@@ -65,7 +63,6 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
-app.use("/api/recommend", recommendRoutes);
 app.use("/api/order", orderRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/payments", paymentRoutes);

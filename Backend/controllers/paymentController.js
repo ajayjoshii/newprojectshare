@@ -224,7 +224,9 @@ exports.saveEsewaPayment = async (req, res) => {
 
     const existingPayment = await Payment.findOne({ transactionId: transaction_uuid });
     if (existingPayment) {
-      return res.status(400).json({ success: false, message: "Payment already exists" });
+      return res.status(200).json({ success: true, message: "Payment already exists",
+        payment: existingPayment
+       });
     }
 
     const orderItems = items.map(i => ({

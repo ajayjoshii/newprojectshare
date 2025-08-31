@@ -2,6 +2,7 @@
 const Order = require('../models/Order');
 const Payment = require('../models/paymentModel');
 const User = require('../models/User');
+const Item = require("../models/itemModel");
 
 
 exports.submitOrder = async (req, res) => {
@@ -96,5 +97,37 @@ exports.deleteOrder = async (req, res) => {
   } catch (err) {
     console.error('Delete order error:', err);
     res.status(500).json({ success: false, message: 'Server error.' });
+  }
+};
+
+exports.getRecommendations = async (req, res) => {
+  try {
+    const { userId } = req.query;
+    if (!userId) return res.status(400).json({ success: false, message: "UserId missing" });
+
+    // Fetch past orders
+    const pastOrders = await Order.find({ userId }).lean();
+    if (!pastOrders.length) return res.json({ success: true, recommendations: [] });
+
+    // Extract provinces from past orders
+    const provinces = [...new Set(pastOrders.map(o => o.province))];
+
+    // Fetch food items in those provinces
+    const recommendedItems = await Item.find({ province: { $in: provinces } }).limit(10);
+
+    res.json({ success: true, recommendations: recommendedItems });
+  } catch (err) {
+    console.error("Recommendation error:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+exports.getUserOrders = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const orders = await Order.find({ "user._id": userId });
+    res.status(200).json(orders);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
   }
 };
