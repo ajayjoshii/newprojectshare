@@ -8,6 +8,8 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const path = require("path");
 const bodyParser = require("body-parser");
+const PORT = process.env.PORT || 3001;
+
 
 const authRoutes = require("./routes/auth.route");
 const userRoutes = require("./routes/userRoutes");
@@ -130,6 +132,6 @@ app.get("/complete-payment", async (req, res) => {
     res.status(500).json({ success: false, message: "An error occurred", error });
   }
 });
-app.listen(3001, () => {
+app.listen(PORT, () => {
   console.log("✅ Backend listening at http://localhost:3001");
 });
