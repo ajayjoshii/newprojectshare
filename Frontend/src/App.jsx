@@ -81,7 +81,6 @@ export default function App() {
     province: province || "Unknown"
   }));
 
-  // Inside App.jsx
   useEffect(() => {
   const fetchRecommendations = async () => {
     if (!user || !province) {

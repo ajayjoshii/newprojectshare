@@ -23,7 +23,6 @@ export default function AdminLogin() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-200 via-white to-green-100 mt-[40px] rounded-2xl">
       <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md border border-gray-100">
-        {/* Title */}
         <h2 className="text-3xl font-extrabold text-center text-gray-800 mb-2">
           Admin Login
         </h2>
@@ -31,7 +30,6 @@ export default function AdminLogin() {
           Welcome back 👋 Please sign in to continue
         </p>
 
-        {/* Email Input */}
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-medium mb-1">
             Email
@@ -45,7 +43,6 @@ export default function AdminLogin() {
           />
         </div>
 
-        {/* Password Input */}
         <div className="mb-6">
           <label className="block text-gray-700 text-sm font-medium mb-1">
             Password
@@ -62,7 +59,6 @@ export default function AdminLogin() {
           </p>
         </div>
 
-        {/* Submit Button */}
         <button
           className="w-full bg-green-600 text-white font-semibold py-2.5 rounded-lg shadow-md hover:bg-green-700 hover:shadow-lg transition duration-300 ease-in-out"
           onClick={submit}
@@ -70,7 +66,6 @@ export default function AdminLogin() {
           Sign In
         </button>
 
-        {/* Extra Info */}
         <p className="text-center text-gray-500 text-xs mt-6">
           © {new Date().getFullYear()} Your Company. All rights reserved.
         </p>

@@ -41,7 +41,6 @@ exports.register = async (req, res) => {
     const hashed = await bcrypt.hash(password, 10);
     const user = await User.create({ name, email, password: hashed, address });
 
-    // ✅ Generate JWT token
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET || "your_jwt_secret", {
       expiresIn: "7d",
     });
@@ -52,7 +51,7 @@ exports.register = async (req, res) => {
         name: user.name,
         email: user.email,
         address: user.address,
-        token, // ✅ return token
+        token, 
       },
     });
   } catch (err) {
@@ -62,7 +61,6 @@ exports.register = async (req, res) => {
 };
 
 
-// ---------------- RESET PASSWORD ----------------
 exports.resetPassword = async (req, res) => {
   const { currentPassword, newPassword } = req.body;
   const user = await User.findById(req.user.id);
@@ -93,7 +91,7 @@ exports.login = async (req, res) => {
         name: user.name,
         email: user.email,
         address: user.address,
-        token,  // token here
+        token,   
       },
     });
   } catch (err) {

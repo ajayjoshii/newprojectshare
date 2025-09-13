@@ -24,7 +24,6 @@ exports.saveEsewaPayment = async (req, res) => {
       price: i.price || i.totalPrice || 0,
     }));
 
-    // create order
     const order = new Order({
       userId: user._id,
       items: orderItems,
@@ -37,7 +36,6 @@ exports.saveEsewaPayment = async (req, res) => {
     });
     await order.save();
 
-    // create payment
     const payment = new Payment({
       transactionId: transaction_uuid,
       orderId: order._id,

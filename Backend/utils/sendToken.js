@@ -7,9 +7,9 @@ const sendToken = (user, res) => {
 
   res.cookie("token", token, {
     httpOnly: true,
-    secure: false, // Set to true in production with HTTPS
+    secure: false, 
     sameSite: "Lax",
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    maxAge: 7 * 24 * 60 * 60 * 1000, 
   });
 
   res.status(200).json({

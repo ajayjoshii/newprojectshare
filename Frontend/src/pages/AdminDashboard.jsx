@@ -71,15 +71,13 @@ export default function AdminDashboard() {
     fetchAll();
   };
 
-  // --- Logout Handler ---
   const handleLogout = () => {
-    localStorage.removeItem("adminToken"); // remove admin auth token if stored
-    navigate("/admin-login"); // redirect to admin login page
+    localStorage.removeItem("adminToken"); 
+    navigate("/admin-login"); 
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* --- Navbar --- */}
       <nav className="fixed top-0 left-0 right-0 bg-white shadow-lg border-b border-gray-200 flex items-center justify-between px-6 h-16 z-50">
         <h1 className="text-2xl font-bold text-gray-800 tracking-tight">⚡ Admin Dashboard</h1>
         <div className="flex gap-2 items-center">
@@ -97,7 +95,6 @@ export default function AdminDashboard() {
             </button>
           ))}
 
-          {/* --- Logout Button --- */}
           <button
             onClick={handleLogout}
             className="ml-4 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg shadow-md font-semibold transition"
@@ -107,7 +104,6 @@ export default function AdminDashboard() {
         </div>
       </nav>
 
-      {/* --- Main Content --- */}
       <div className="p-8 mt-[80px] max-w-6xl mx-auto">
         {error && (
           <p className="mb-6 p-3 bg-red-100 text-red-700 border border-red-300 rounded-lg shadow-sm">
@@ -115,7 +111,6 @@ export default function AdminDashboard() {
           </p>
         )}
 
-        {/* --- Users Tab --- */}
         {activeTab === "users" && (
           <section className="mb-12">
             <h2 className="text-xl font-semibold mb-4 text-gray-800">👥 Users</h2>
@@ -145,12 +140,10 @@ export default function AdminDashboard() {
           </section>
         )}
 
-        {/* --- Items Tab --- */}
         {activeTab === "items" && (
           <section className="mb-12">
             <h2 className="text-xl font-semibold mb-4 text-gray-800">📦 Items</h2>
             <div className="bg-white shadow-md rounded-lg overflow-hidden border border-gray-200">
-              {/* Add Item Row */}
               <div className="flex items-center gap-3 p-4 border-b">
                 <input
                   type="text"
@@ -181,7 +174,6 @@ export default function AdminDashboard() {
                 </button>
               </div>
 
-              {/* Existing Items */}
               {items.length ? (
                 items.map((i) => (
                   <div
@@ -234,7 +226,6 @@ export default function AdminDashboard() {
           </section>
         )}
 
-        {/* --- Orders Tab --- */}
         {activeTab === "orders" && (
           <section className="mb-12">
             <h2 className="text-xl font-semibold mb-4 text-gray-800">📜 Orders</h2>
@@ -278,7 +269,6 @@ export default function AdminDashboard() {
           </section>
         )}
 
-        {/* --- Payments Tab --- */}
         {activeTab === "payments" && (
           <section className="mb-12">
             <h2 className="text-xl font-semibold mb-4 text-gray-800">💳 Payments</h2>

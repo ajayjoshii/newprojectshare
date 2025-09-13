@@ -3,7 +3,7 @@ const Order = require('../models/Order');
 const Payment = require('../models/paymentModel');
 const User = require('../models/User');
 const Item = require("../models/itemModel");
-const defaultFoodItems = require("../data/foodItems"); // move your defaultFoodItems to a separate file
+const defaultFoodItems = require("../data/foodItems"); 
 
 
 
@@ -48,7 +48,6 @@ exports.getOrderDetails = async (req, res) => {
   }
 };
 
-// Admin: list all orders with optional filters
 exports.listOrders = async (req, res) => {
   try {
     const { status, paymentStatus, province, q } = req.query;
@@ -69,7 +68,6 @@ exports.listOrders = async (req, res) => {
   }
 };
 
-// Admin: update order status / payment status
 exports.updateOrder = async (req, res) => {
   try {
     const { orderId } = req.params;
@@ -88,12 +86,10 @@ exports.updateOrder = async (req, res) => {
   }
 };
 
-// Admin: delete order
 exports.deleteOrder = async (req, res) => {
   try {
     const { orderId } = req.params;
     await Order.findByIdAndDelete(orderId);
-    // Optionally remove from user's orders array
     await User.updateMany({}, { $pull: { orders: { _id: orderId } }});
     res.json({ success: true, message: 'Order deleted' });
   } catch (err) {
@@ -102,27 +98,6 @@ exports.deleteOrder = async (req, res) => {
   }
 };
 
-// exports.getRecommendations = async (req, res) => {
-//   try {
-//     const { userId } = req.query;
-//     if (!userId) return res.status(400).json({ success: false, message: "UserId missing" });
-
-//     // Fetch past orders
-//     const pastOrders = await Order.find({ userId }).lean();
-//     if (!pastOrders.length) return res.json({ success: true, recommendations: [] });
-
-//     // Extract provinces from past orders
-//     const provinces = [...new Set(pastOrders.map(o => o.province))];
-
-//     // Fetch food items in those provinces
-//     const recommendedItems = await Item.find({ province: { $in: provinces } }).limit(10);
-
-//     res.json({ success: true, recommendations: recommendedItems });
-//   } catch (err) {
-//     console.error("Recommendation error:", err);
-//     res.status(500).json({ success: false, message: "Server error" });
-//   }
-// };
 
 exports.getUserOrders = async (req, res) => {
   try {
@@ -134,7 +109,6 @@ exports.getUserOrders = async (req, res) => {
   }
 };
 
-// Get user-specific and province-specific recommendations
 exports.getRecommendations = async (req, res) => {
   try {
     const userId = req.query.userId;
@@ -142,20 +116,16 @@ exports.getRecommendations = async (req, res) => {
 
     if (!userId) return res.status(400).json({ success: false, message: "User ID is required" });
 
-    // Fetch past orders for the user
     const userOrders = await Order.find({ userId });
     const userPastItems = userOrders.flatMap(order => order.items.map(item => item.name));
 
-    // Fetch province orders
     const provinceOrders = await Order.find({ province });
     const provincePastItems = provinceOrders.flatMap(order => order.items.map(item => item.name));
 
-    // Filter food items that are in user's past orders OR popular in the province
     const recommendedItems = defaultFoodItems.filter(item =>
       userPastItems.includes(item.name) || provincePastItems.includes(item.name)
     );
 
-    // Shuffle recommendations and limit to 8
     const shuffled = recommendedItems.sort(() => 0.5 - Math.random()).slice(0, 8);
 
     res.json({ success: true, recommendations: shuffled });

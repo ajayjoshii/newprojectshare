@@ -7,7 +7,6 @@ const Footer = () => {
     <footer className="m-1 bg-gray-200 rounded-xs text-black pt-10 pb-6 px-4">
       <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 text-sm">
 
-        {/* About Section */}
         <div>
           <h3 className="text-lg font-semibold mb-3">We're FoodorderNP</h3>
           <ul className="space-y-2">
@@ -22,7 +21,6 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Help Section */}
         <div>
           <h3 className="text-lg font-semibold mb-3">Get Help</h3>
           <ul className="space-y-2">
@@ -39,7 +37,6 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Contact Section */}
         <div>
           <h3 className="text-lg font-semibold mb-3">Call Us</h3>
           <p className="mb-2">Our helpline stays the same across all seven provinces for seamless support.</p>
@@ -51,7 +48,6 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Connect Section */}
         <div>
           <h3 className="text-lg font-semibold mb-3">Connect with Us</h3>
           <div className="flex space-x-4 mb-4">
@@ -65,7 +61,7 @@ const Footer = () => {
               <FaFacebookF />
             </a>
             <a
-              href="https://twitter.com"
+              href="https://x.com/OrderNp40588"
               target="_blank"
               rel="noopener noreferrer"
               className="text-black hover:text-blue-400"
@@ -83,7 +79,7 @@ const Footer = () => {
               <FaInstagram />
             </a>
             <a
-              href="https://www.youtube.com"
+              href="https://www.youtube.com/channel/UCOYaufNqNg3LSaIWUSxqrtA"
               target="_blank"
               rel="noopener noreferrer"
               className="text-black hover:text-red-600"
@@ -95,7 +91,6 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Bottom Bar */}
       <div className="mt-10 border-t border-gray-700 pt-4 text-center text-xs text-gray-400">
         Terms of Usage | Privacy Policy <br />
         © 2020 Foodmandu Pvt. Ltd. All Rights Reserved.

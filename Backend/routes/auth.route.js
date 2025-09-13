@@ -130,7 +130,6 @@ router.put('/profile', authMiddleware, upload.single('profileImage'), async (req
     if (address) user.address = address;
 
     if (req.file) {
-      // Save path relative to uploads folder
       user.profileImage = `/uploads/profileImages/${req.file.filename}`;
     }
 
