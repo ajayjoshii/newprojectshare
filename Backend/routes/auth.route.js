@@ -12,6 +12,7 @@ const User = require("../models/User");
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || "secretkey";
 
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const dir = "./uploads/profileImages";
@@ -42,7 +43,7 @@ router.post("/register", async (req, res) => {
       password: hashedPassword,
       address,
       phone,
-      
+
     });
     await newUser.save();
 
@@ -64,6 +65,7 @@ router.post("/register", async (req, res) => {
     res.status(500).json({ msg: error.message });
   }
 });
+
 
 router.post("/login", async (req, res) => {
   try {
@@ -139,6 +141,7 @@ router.put('/profile', authMiddleware, upload.single('profileImage'), async (req
     res.status(500).json({ msg: error.message });
   }
 });
+
 router.post("/forgot-password", async (req, res) => {
   try {
     const { email } = req.body;
@@ -204,3 +207,4 @@ router.post("/reset-password", async (req, res) => {
 });
 
 module.exports = router;
+

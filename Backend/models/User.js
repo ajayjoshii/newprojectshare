@@ -18,7 +18,13 @@ const userSchema = new mongoose.Schema({
   profileImage: { type: String, default: "" },
   resetPasswordToken: String,
   resetPasswordExpires: Date,
+  isVerified: { type: Boolean, default: false },
+  verificationToken: String,
   isAdmin: { type: Boolean, default: false },
+  otpHash: { type: String }, // bcrypt hashed OTP
+
+  otpExpires: Date,
+
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema);

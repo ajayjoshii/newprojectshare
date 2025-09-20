@@ -132,3 +132,5 @@ const FoodItem = ({ item, addToCart }) => (
     </div>
   </div>
 );
+
+

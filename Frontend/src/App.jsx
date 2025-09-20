@@ -21,6 +21,7 @@ import ImageCarousel from "./components/ImageCarousel/ImageCarousel";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminLogin from "./pages/AdminLogin";
 import { defaultFoodItems } from "./data/foodData";
+import VerifyOTP from "./components/NavComponents/verifyOTP";
 
 const ProtectedAdmin = ({ children }) => {
   const token = localStorage.getItem("adminToken");
@@ -47,7 +48,7 @@ export default function App() {
       try {
         const token = localStorage.getItem("token");
         if (!token) return;
-        const res = await axios.get(`${BASE_URL}/api/users/profile`, {
+        const res = await axios.get(`${BASE_URL}/api/auth/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUser(res.data);
@@ -56,6 +57,7 @@ export default function App() {
     };
     fetchUser();
   }, []);
+
 
   useEffect(() => {
     if (province) return;
@@ -82,25 +84,25 @@ export default function App() {
   }));
 
   useEffect(() => {
-  const fetchRecommendations = async () => {
-    if (!user || !province) {
-      setRecommendations([]);
-      return;
-    }
-    try {
-      const token = localStorage.getItem("token");
-      const res = await axios.get(`${BASE_URL}/api/order/recommendations`, {
-        headers: { Authorization: `Bearer ${token}` },
-        params: { userId: user._id, province }
-      });
-      setRecommendations(res.data.recommendations || []);
-    } catch (err) {
-      console.error("Failed to fetch recommendations:", err);
-      setRecommendations([]);
-    }
-  };
-  fetchRecommendations();
-}, [user, province]);
+    const fetchRecommendations = async () => {
+      if (!user || !province) {
+        setRecommendations([]);
+        return;
+      }
+      try {
+        const token = localStorage.getItem("token");
+        const res = await axios.get(`${BASE_URL}/api/order/recommendations`, {
+          headers: { Authorization: `Bearer ${token}` },
+          params: { userId: user._id, province }
+        });
+        setRecommendations(res.data.recommendations || []);
+      } catch (err) {
+        console.error("Failed to fetch recommendations:", err);
+        setRecommendations([]);
+      }
+    };
+    fetchRecommendations();
+  }, [user, province]);
 
 
 
@@ -163,6 +165,7 @@ export default function App() {
       <Header user={user} cart={cart} province={province} setProvince={setProvince} onLogout={handleLogout} onSearch={setSearchTerm} mobileMenuOpen={mobileMenuOpen} setMobileMenuOpen={setMobileMenuOpen} />
       <main className="flex-grow container mx-auto p-6">
         <Routes>
+
           <Route path="/admin-login" element={<AdminLogin />} />
           <Route path="/admin" element={<ProtectedAdmin><AdminDashboard /></ProtectedAdmin>} />
           <Route path="/" element={<><ImageCarousel /><Home addToCart={addToCart} province={province} setProvince={setProvince} provinces={PROVINCES} recs={recommendations} defaultFoodItems={filteredFoodItems} /><About /></>} />
@@ -170,6 +173,9 @@ export default function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/cart" element={<Cart cartItems={cart} updateQty={updateQty} deleteItem={deleteItem} clearCart={clearCart} user={user} province={province} submitOrder={submitOrder} />} />
           <Route path="/login" element={<Login onLogin={handleLogin} onRegister={setUser} />} />
+
+          <Route path="/verify-otp" element={<VerifyOTP onLogin={handleLogin} />} />
+
           <Route path="/delivery-charges" element={<Delivery_Charges />} />
           <Route path="/how-to-order" element={<HowToOrder />} />
           <Route path="/faqs" element={<Faqs />} />
@@ -185,3 +191,4 @@ export default function App() {
     </div>
   );
 }
+
